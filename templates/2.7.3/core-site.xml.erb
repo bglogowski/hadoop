@@ -25,10 +25,10 @@
     </property>
 <% end -%>
 
-<% unless @zookeeper_quorum.nil? -%>
+<% unless @zookeepers.nil? -%>
     <property>
       <name>ha.zookeeper.quorum</name>
-      <value><%= @zookeeper_quorum.map{ |z| z << ':2181' }.join(',') -%></value>
+      <value><%= @zookeepers.map{ |z| z << ':2181' }.sort.join(',') -%></value>
     </property>
 <% end -%>
 
