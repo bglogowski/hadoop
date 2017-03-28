@@ -1,0 +1,14 @@
+<% unless @VARIABLE.nil? -%>
+    <property>
+      <name>SETTING</name>
+      <value><%= @VARIABLE.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @VARIABLE.nil? or @VARIABLE.empty? -%>
+    <property>
+      <name>SETTING</name>
+      <value><%= @VARIABLE -%></value>
+    </property>
+
+<% end -%>

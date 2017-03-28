@@ -1,0 +1,37 @@
+[Unit]
+Description=The Hadoop historyserver daemon
+After=network.target
+After=NetworkManager.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/hadoop-yarn
+EnvironmentFile=-/etc/sysconfig/hadoop-historyserver
+ExecStart=/usr/sbin/yarn-daemon.sh start historyserver
+ExecStop=/usr/sbin/yarn-daemon.sh stop historyserver
+User=yarn
+Group=hadoop
+PIDFile=/var/run/hadoop-yarn/yarn-yarn-historyserver.pid
+LimitNOFILE=32768
+LimitNPROC=65536
+
+#######################################
+# Note: Below are cgroup options
+#######################################
+#Slice=
+#CPUAccounting=true
+#CPUShares=1024
+
+#MemoryAccounting=true
+#TBD: MemoryLimit=bytes, MemorySoftLimit=bytes
+
+#BlockIOAccounting=true
+#BlockIOWeight=??
+#BlockIODeviceWeight=??
+#TBD: BlockIOReadBandwidth=bytes, BlockIOWriteBandwidth=bytes
+
+#DeviceAllow=
+#DevicePolicy=auto|closed|strict
+
+[Install]
+WantedBy=multi-user.target

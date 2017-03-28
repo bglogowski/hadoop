@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+
+<% unless @hdfs_nn_http_port.nil? -%>
+    <property>
+      <name>dfs.http.port</name>
+      <value><%= @hdfs_nn_http_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_nn_https_port.nil? -%>
+    <property>
+      <name>dfs.https.port</name>
+      <value><%= @hdfs_nn_https_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_blocksize.nil? -%>
+    <property>
+      <name>dfs.blocksize</name>
+      <value><%= @hdfs_blocksize.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_administrators.nil? or @hdfs_administrators.empty? -%>
+    <property>
+      <name>dfs.cluster.administrators</name>
+      <value><%= @hdfs_administrators -%></value>
+    </property>
+
+<% end -%>
+<% unless @hadoop_cluster.nil? or @hadoop_cluster.empty? -%>
+    <property>
+      <name>dfs.nameservices</name>
+      <value><%= @hadoop_cluster -%></value>
+    </property>
+
+    <property>
+      <name>dfs.ha.automatic-failover.enabled</name>
+      <value>true</value>
+    </property>
+
+    <property>
+      <name>dfs.client.failover.proxy.provider.<%= @hadoop_cluster -%></name>
+      <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+    </property>
+
+<% unless @namenodes.nil? or @namenodes.empty? -%>
+    <property>
+      <name>dfs.ha.namenodes.<%= @hadoop_cluster -%></name>
+      <value><%= @namenodes.map{ |n| n.split('.')[0] }.join(',') -%></value>
+    </property>
+
+<% @namenodes.each do |nn| -%>
+    <property>
+      <name>dfs.namenode.http-address.<%= @hadoop_cluster -%>.<%= nn.split('.')[0] -%></name>
+      <value><%= nn -%>:<%= @hdfs_nn_http_port.to_i -%></value>
+    </property>
+
+    <property>
+      <name>dfs.namenode.https-address.<%= @hadoop_cluster -%>.<%= nn.split('.')[0] -%></name>
+      <value><%= nn -%>:<%= @hdfs_nn_https_port.to_i -%></value>
+    </property>
+
+    <property>
+      <name>dfs.namenode.rpc-address.<%= @hadoop_cluster -%>.<%= nn.split('.')[0] -%></name>
+      <value><%= nn -%>:<%= @hdfs_nn_rpc_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @journalnodes.nil? or @journalnodes.empty? -%>
+<% unless @hdfs_jn_http_port.nil? -%>
+    <property>
+      <name>dfs.journalnode.http-address</name>
+      <value>0.0.0.0:<%= @hdfs_jn_http_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_jn_https_port.nil? -%>
+    <property>
+      <name>dfs.journalnode.https-address</name>
+      <value>0.0.0.0:<%= @hdfs_jn_https_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_jn_rpc_port.nil? -%>
+    <property>
+      <name>dfs.journalnode.rpc-address</name>
+      <value>0.0.0.0:<%= @hdfs_jn_rpc_port.to_i -%></value>
+    </property>
+
+    <property>
+      <name>dfs.namenode.shared.edits.dir</name>
+      <value>qjournal://<%= @journalnodes.map{ |j| j << ":#{@hdfs_jn_rpc_port.to_i}" }.sort.join(';') -%>/<%= @hadoop_cluster -%></value>
+    </property>
+
+<% end -%>
+<% end -%>
+<% end -%>
+<% end -%>
+    <property>
+      <name>dfs.datanode.data.dir</name>
+      <value><%= @hdfs_dn_data_dir -%></value>
+    </property>
+
+    <property>
+      <name>dfs.datanode.data.dir.perm</name>
+      <value>750</value>
+    </property>
+
+<% unless @hdfs_dn_hdfs_port.nil? -%>
+    <property>
+      <name>dfs.datanode.address</name>
+      <value>0.0.0.0:<%= @hdfs_dn_hdfs_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_dn_http_port.nil? -%>
+    <property>
+      <name>dfs.datanode.http.address</name>
+      <value>0.0.0.0:<%= @hdfs_dn_http_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_dn_https_port.nil? -%>
+    <property>
+      <name>dfs.datanode.https.address</name>
+      <value>0.0.0.0:<%= @hdfs_dn_https_port.to_i -%></value>
+    </property>
+
+<% end -%>
+<% unless @hdfs_dn_ipc_port.nil? -%>
+    <property>
+      <name>dfs.datanode.ipc.address</name>
+      <value>0.0.0.0:<%= @hdfs_dn_ipc_port.to_i -%></value>
+    </property>
+
+<% end -%>
+</configuration>

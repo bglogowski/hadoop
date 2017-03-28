@@ -1,0 +1,37 @@
+[Unit]
+Description=The Hadoop journalnode daemon
+After=network.target
+After=NetworkManager.target
+
+[Service]
+Type=forking
+EnvironmentFile=-/etc/sysconfig/hadoop-hdfs
+EnvironmentFile=-/etc/sysconfig/hadoop-journalnode
+ExecStart=/usr/sbin/hadoop-daemon.sh start journalnode
+ExecStop=/usr/sbin/hadoop-daemon.sh stop journalnode
+User=hdfs
+Group=hadoop
+PIDFile=/var/run/hadoop-hdfs/hadoop-hdfs-journalnode.pid
+LimitNOFILE=32768
+LimitNPROC=65536
+
+#######################################
+# Note: Below are cgroup options
+#######################################
+#Slice=
+#CPUAccounting=true
+#CPUShares=1024
+
+#MemoryAccounting=true
+#TBD: MemoryLimit=bytes, MemorySoftLimit=bytes
+
+#BlockIOAccounting=true
+#BlockIOWeight=??
+#BlockIODeviceWeight=??
+#TBD: BlockIOReadBandwidth=bytes, BlockIOWriteBandwidth=bytes
+
+#DeviceAllow=
+#DevicePolicy=auto|closed|strict
+
+[Install]
+WantedBy=multi-user.target
