@@ -4,7 +4,7 @@
   "author": "Bryan Glogowski <bglogowski@marketo.com>",
   "summary": "Manages Hadoop Components",
   "license": "Apache-2.0",
-  "source": "https://github.com/dalen/puppet-puppetdbquery.git",
+  "source": "https://github.com/bglogowski/hadoop.git",
   "dependencies": [
   
   ],

@@ -1,1 +1,1 @@
-# hadoop
+# Hadoop Puppet Module
